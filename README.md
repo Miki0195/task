@@ -2,6 +2,15 @@
 
 ## Quick Start
 
+### Environment Setup
+
+Configure your API endpoint in `.env`:
+   ```bash
+   VITE_API_BASE_URL=https://test.superhero.hu
+   ```
+
+### Development
+
 ```bash
 # Install dependencies
 npm install

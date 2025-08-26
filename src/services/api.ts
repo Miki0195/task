@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { type FormField, type ChoiceOption, type FormData, type FormSubmissionResponse } from '../types/form';
 
-const API_BASE_URL = 'https://test.superhero.hu';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
   baseURL: API_BASE_URL,

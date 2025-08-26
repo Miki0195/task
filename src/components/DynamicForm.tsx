@@ -3,7 +3,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormField } from './FormField';
 import { useFormDefinition } from '../hooks/useFormQuery';
-import { createFormSchema } from '../utils/validation';
+import { createFormSchema, processFormFields } from '../utils/validation';
 import { formApi } from '../services/api';
 import { type FormData } from '../types/form';
 
@@ -22,8 +22,13 @@ export const DynamicForm: FC = () => {
     refetch,
   } = useFormDefinition();
 
-  const formSchema = useMemo(() => {
-    return formFields ? createFormSchema(formFields) : null;
+  const { processedFields, formSchema } = useMemo(() => {
+    if (!formFields) return { processedFields: null, formSchema: null };
+    
+    const processed = processFormFields(formFields);
+    const schema = createFormSchema(formFields);
+    
+    return { processedFields: processed, formSchema: schema };
   }, [formFields]);
 
   const methods = useForm({
@@ -118,17 +123,17 @@ export const DynamicForm: FC = () => {
             <p className="text-gray-600 form-subtitle">
               Please fill out all the required fields below
             </p>
-            <div className="text-center mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            {/* <div className="text-center mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-sm text-blue-700">
-                <span className="font-medium">Note:</span> Field types are randomly assigned by the API. 
-                Please follow the field type indicators and validation messages.
+                <span className="font-medium">Smart Form Detection:</span> Field types are automatically corrected based on content. 
+                Check the browser console for any API inconsistency warnings.
               </p>
-            </div>
+            </div> */}
           </div>
 
           <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
-              {formFields.map((field) => (
+              {(processedFields || formFields).map((field) => (
                 <FormField key={field.id} field={field} />
               ))}
 

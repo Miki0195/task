@@ -35,24 +35,38 @@ export const FormField: FC<FormFieldProps> = ({ field }) => {
   const renderInput = () => {
     switch (field.widget) {
       case 'integer':
+        const integerHelpText = field.originalWidget === 'text' 
+          ? `Originally text field, but expecting numbers based on field name`
+          : `Enter a whole number (e.g., 123, -45)`;
+        
         return (
-          <input
-            {...register(field.id)}
-            type="text"
-            inputMode="numeric"
-            placeholder={`Enter a number for ${field.label.toLowerCase()}`}
-            className={baseInputClasses}
-          />
+          <div>
+            <input
+              {...register(field.id)}
+              type="text"
+              inputMode="numeric"
+              placeholder={`Enter a number for ${field.label.toLowerCase()}`}
+              className={baseInputClasses}
+              title={integerHelpText}
+            />
+          </div>
         );
 
       case 'text':
+        const textHelpText = field.originalWidget === 'integer' 
+          ? `Originally numeric field, but expecting text based on field name`
+          : `Enter text (minimum 2 characters)`;
+          
         return (
-          <input
-            {...register(field.id)}
-            type="text"
-            placeholder={`Enter text for ${field.label.toLowerCase()}`}
-            className={baseInputClasses}
-          />
+          <div>
+            <input
+              {...register(field.id)}
+              type="text"
+              placeholder={`Enter text for ${field.label.toLowerCase()}`}
+              className={baseInputClasses}
+              title={textHelpText}
+            />
+          </div>
         );
 
       case 'choice':
